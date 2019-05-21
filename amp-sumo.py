@@ -17,19 +17,11 @@ print("after connection")
 channel = connection.channel()
 print("after channel")
 
-while True:
-  try:
-   method_frame, header_frame, body = channel.basic_get(queuename)
-   print("after channel.basic_get")
-   if method_frame:
-    print(body)
-    r = requests.post(url, data=body, headers=headers)
-    channel.basic_ack(method_frame.delivery_tag)
-   else:
-    print('No message returned')
-#    print("Sleeping for 5s")
-    sleep(5)
-  except KeyboardInterrupt:
-   print('Exiting')
-   break
-  continue
+method_frame, header_frame, body = channel.basic_get(queuename)
+print("after channel.basic_get")
+if method_frame:
+ print(body)
+ r = requests.post(url, data=body, headers=headers)
+ channel.basic_ack(method_frame.delivery_tag)
+else:
+ print('No message returned')
